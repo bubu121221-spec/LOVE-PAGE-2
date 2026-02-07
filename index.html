@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Just for You 💙</title>
+
+  <!-- Lottie Web for sticker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.1/lottie.min.js"></script>
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffdee9, #b5fffc);
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+    }
+
+    .box {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      position: relative;
+      min-width: 300px;
+    }
+
+    h1 { margin-bottom: 30px; color: #333; }
+
+    button {
+      padding: 12px 28px;
+      font-size: 18px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin: 10px;
+      transition: 0.2s;
+    }
+
+    #yes { background: #ff4d6d; color: white; }
+    #no { background: #ccc; position: absolute; top:50%; left:60%; }
+
+    #sticker { width: 200px; height: 200px; margin: 20px auto; display: none; }
+    #secret { margin-top: 20px; display:none; cursor:pointer; background:#ffd1dc; padding:10px 20px; border-radius:15px; }
+    #message { display:none; margin-top:15px; color:#ff4d6d; font-weight:bold; }
+
+    #us-img { display:none; width:250px; margin:20px auto; border-radius:15px; }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h1>Will you be mine forever, Angel? 💙</h1>
+    <button id="yes">Yes ❤️</button>
+    <button id="no">No 😅</button>
+
+    <!-- Sticker -->
+    <div id="sticker"></div>
+
+    <!-- Secret message -->
+    <button id="secret">Click for a secret 💌</button>
+    <p id="message">You are my angel, my heart beats for you 😇💖</p>
+
+    <!-- Image -->
+    <img id="us-img" src="us.jpg" alt="Us">
+  </div>
+
+  <!-- Optional music -->
+  <audio autoplay loop>
+    <source src="love-song.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // Moving No button
+    const noBtn = document.getElementById("no");
+    noBtn.addEventListener("mouseover", () => {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 100);
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+      const phrases = ["Try again 😅","Nope 😜","Oops 💨"];
+      noBtn.innerText = phrases[Math.floor(Math.random()*phrases.length)];
+    });
+
+    // Yes click
+    document.getElementById("yes").addEventListener("click", () => {
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+      // Show sticker
+      const stickerDiv = document.getElementById("sticker");
+      stickerDiv.style.display = "block";
+      lottie.loadAnimation({
+        container: stickerDiv,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'sticker.json'
+      });
+
+      // Show image
+      const usImg = document.getElementById("us-img");
+      usImg.style.display = "block";
+
+      // Show secret button
+      const secretBtn = document.getElementById("secret");
+      secretBtn.style.display = "inline-block";
+
+      // Update main text
+      document.querySelector(".box h1").innerText = "I knew it, Angel 😌💍";
+      document.querySelector(".box p").innerText = "You just made my heart very happy 💙";
+    });
+
+    // Secret button click
+    document.getElementById("secret").addEventListener("click", () => {
+      document.getElementById("message").style.display = "block";
+    });
+  </script>
+
+</body>
+</html>
