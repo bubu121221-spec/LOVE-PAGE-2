@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Just for You 💙</title>
+  <meta charset="UTF-8" />
+  <title>Just One Question ❤️</title>
 
   <!-- Lottie Web for sticker -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.1/lottie.min.js"></script>
-
-  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -32,7 +30,10 @@
       min-width: 300px;
     }
 
-    h1 { margin-bottom: 30px; color: #333; }
+    h1 {
+      margin-bottom: 30px;
+      color: #333;
+    }
 
     button {
       padding: 12px 28px;
@@ -45,83 +46,96 @@
     }
 
     #yes { background: #ff4d6d; color: white; }
-    #no { background: #ccc; position: absolute; top:50%; left:60%; }
+
+    /* No button runs in viewport */
+    #no {
+      background: #ccc;
+      position: fixed;
+      top: 50%;
+      left: 60%;
+      transform: translate(-50%, -50%);
+    }
 
     #sticker { width: 200px; height: 200px; margin: 20px auto; display: none; }
     #secret { margin-top: 20px; display:none; cursor:pointer; background:#ffd1dc; padding:10px 20px; border-radius:15px; }
     #message { display:none; margin-top:15px; color:#ff4d6d; font-weight:bold; }
-
     #us-img { display:none; width:250px; margin:20px auto; border-radius:15px; }
   </style>
 </head>
 <body>
 
-  <div class="box">
-    <h1>Will you be mine forever, Angel? 💙</h1>
-    <button id="yes">Yes ❤️</button>
-    <button id="no">No 😅</button>
+<div class="box" id="question-box">
+  <h1>Will you be mine forever? 💙</h1>
+  <button id="yes">Yes ❤️</button>
+  <button id="no">No 😅</button>
+</div>
 
-    <!-- Sticker -->
-    <div id="sticker"></div>
+<div class="box" id="secret-box" style="display:none;">
+  <h1>I knew it 😌💍</h1>
+  <p>You just made my heart very happy 💙</p>
+  <div id="sticker"></div>
+  <button id="secret">Click for a secret 💌</button>
+  <p id="message">You are my angel, my heart beats for you 😇💖</p>
+  <img id="us-img" src="YOUR_IMAGE_LINK" alt="Us">
+</div>
 
-    <!-- Secret message -->
-    <button id="secret">Click for a secret 💌</button>
-    <p id="message">You are my angel, my heart beats for you 😇💖</p>
+<!-- Music -->
+<audio autoplay loop>
+  <source src="https://drive.google.com/uc?export=download&id=1mmBtjJScTKVCgF01bPasJUcKdP2hZZ0d" type="audio/mpeg">
+</audio>
 
-    <!-- Image -->
-    <img id="us-img" src="us.jpg" alt="Us">
-  </div>
+<script>
+const noBtn = document.getElementById("no");
 
-  <!-- Optional music -->
-  <audio autoplay loop>
-    <source src="love-song.mp3" type="audio/mpeg">
-  </audio>
+// Make No button move but stay inside viewport
+noBtn.addEventListener("mouseover", () => {
+  const maxX = window.innerWidth - noBtn.offsetWidth - 10;
+  const maxY = window.innerHeight - noBtn.offsetHeight - 10;
 
-  <script>
-    // Moving No button
-    const noBtn = document.getElementById("no");
-    noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 100);
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-      const phrases = ["Try again 😅","Nope 😜","Oops 💨"];
-      noBtn.innerText = phrases[Math.floor(Math.random()*phrases.length)];
-    });
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
 
-    // Yes click
-    document.getElementById("yes").addEventListener("click", () => {
-      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+});
 
-      // Show sticker
-      const stickerDiv = document.getElementById("sticker");
-      stickerDiv.style.display = "block";
-      lottie.loadAnimation({
-        container: stickerDiv,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: 'sticker.json'
-      });
+// Yes button click → show secret page
+document.getElementById("yes").addEventListener("click", () => {
+  // Hide question box
+  document.getElementById("question-box").style.display = "none";
 
-      // Show image
-      const usImg = document.getElementById("us-img");
-      usImg.style.display = "block";
+  // Show secret box
+  const secretBox = document.getElementById("secret-box");
+  secretBox.style.display = "block";
 
-      // Show secret button
-      const secretBtn = document.getElementById("secret");
-      secretBtn.style.display = "inline-block";
+  // Confetti
+  confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
-      // Update main text
-      document.querySelector(".box h1").innerText = "I knew it, Angel 😌💍";
-      document.querySelector(".box p").innerText = "You just made my heart very happy 💙";
-    });
+  // Show sticker
+  const stickerDiv = document.getElementById("sticker");
+  stickerDiv.style.display = "block";
+  lottie.loadAnimation({
+    container: stickerDiv,
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: 'https://drive.google.com/uc?export=download&id=1KpBoaoA3Cx3YVJ3HSgIAddu7Uw4nnrfh' // working JSON sticker link
+  });
 
-    // Secret button click
-    document.getElementById("secret").addEventListener("click", () => {
-      document.getElementById("message").style.display = "block";
-    });
-  </script>
+  // Show image
+  document.getElementById("us-img").style.display = "block";
+
+  // Show secret button
+  const secretBtn = document.getElementById("secret");
+  secretBtn.style.display = "inline-block";
+});
+
+// Secret button click → show message
+document.getElementById("secret").addEventListener("click", () => {
+  document.getElementById("message").style.display = "block";
+});
+</script>
 
 </body>
 </html>
+
